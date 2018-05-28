@@ -8,6 +8,7 @@
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
+
 $(function() {
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
@@ -32,15 +33,49 @@ $(function() {
          * and that the URL is not empty.
          */
 
+         it('URL is defined and not empty', function(){
+            allFeeds.forEach(function(item){
+                expect(item['url']).toBeDefined();
+                expect(item['url']).toBeTruthy();
+            });
+         });
+
 
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
+
+         it('Name is defined and not empty', function(){
+            allFeeds.forEach(function(item){
+                expect(item['name']).toBeDefined();
+                expect(item['name']).toBeTruthy();
+            });
+         });
+
     });
 
 
     /* TODO: Write a new test suite named "The menu" */
+
+    describe('The menu', function(){
+         var body;
+
+         beforeEach(function(){
+            body = $('body');
+         });
+
+        it('Menu is hidden by default', function(){
+            expect(body.hasClass('menu-hidden')).toBe(true);
+        });
+
+        it('menu changes visibility when clicked', function(){
+            body.click();
+            expect(body.attr('class')).toEqual('menu-hidden');
+            body.click();
+            expect(body.hasClass('menu-hidden')).toBe(true);
+        });
+    });
 
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
@@ -55,6 +90,17 @@ $(function() {
           */
 
     /* TODO: Write a new test suite named "Initial Entries" */
+    describe('Initial Entries',function(){
+        beforeEach(function(done){
+            loadFeed(0,done);
+        });
+
+        it('container has at least one entry', function(done){
+            var container = $('.feed');
+            expect(container.children().length).not.toBe(0);
+            done();
+        });
+    });
 
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
@@ -62,7 +108,22 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+         describe('New Feed Selection',function(){
+            var content,
+                newContent;
+            beforeEach(function(done){
+                content = $('.entry').html();
+                loadFeed(1,done);
+                setTimeout(function(){},3000);
+            });
 
+            it('ensures the new feed is loaded and the content changes',function(done){
+                newContent = $('.entry').html();
+                expect(newContent).not.toBe(content);
+                done();
+            })
+
+         });
     /* TODO: Write a new test suite named "New Feed Selection" */
 
         /* TODO: Write a test that ensures when a new feed is loaded
