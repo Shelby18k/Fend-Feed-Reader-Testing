@@ -113,22 +113,23 @@ $(function() {
                 newContent;
             // Function runs before the test cases, for ajax to load the feeds in the background
             beforeEach(function(done){
-                loadFeed(0,function(){
-                    content = $('.feed').html();
-                });
-                loadFeed(1, function(){
-                    newContent = $('.feed').html();
-                    done();
-                })
+            		beforeEach(function(done){
+            			loadFeed(1, function(){
+            				newContent = $('.feed').html();
+            				done();
+            			});
+            		});
             });
 
             /* Test Case 1: Checks for the new content loads or not
              * when user clicks on the new topics
              */
             it('ensures the new feed is loaded and the content changes',function(done){
-                console.log(content);
-                expect(newContent).not.toBe(content);
-                done();
+                loadFeed(0, function(){
+                	content = $('.feed').children().text();
+                	expect(newContent).not.toEqual(content);
+                	done();
+                });
             });
 
          });
