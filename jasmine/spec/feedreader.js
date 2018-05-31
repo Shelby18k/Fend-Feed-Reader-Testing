@@ -114,17 +114,19 @@ $(function() {
         beforeEach(function(done) {
             loadFeed(1, function() {
                 content = $('.feed').html();
-                done();
+
+                loadFeed(0, function(){
+                	newContent = $('.feed').html()
+                	done();
+                });
             });
         });
 
         /*  This is the test that ensures when a new feed is loaded
             by the loadFeed function that the content actually changes.*/
         it('verified new feed is loaded', function(done) {
-            loadFeed(0, function() {
-                expect($('.feed').html()).not.toEqual(content);
+                expect(newContent).not.toEqual(content);
                 done();
-            });
         });
 	});
 }());
